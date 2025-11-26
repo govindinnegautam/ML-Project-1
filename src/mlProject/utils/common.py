@@ -4,7 +4,17 @@ import yaml
 from mlProject import logger
 import json
 import joblib
-from ensure import ensure_annotations
+try:
+    from ensure import ensure_annotations
+except Exception:
+    # Fallback: define a no-op decorator to preserve behavior when
+    # the `ensure` package is incompatible with the current Python.
+    def ensure_annotations(func=None, *args, **kwargs):
+        if func is None:
+            def _decorator(f):
+                return f
+            return _decorator
+        return func
 from box import ConfigBox
 from pathlib import Path
 from typing import Any
